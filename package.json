@@ -1,7 +1,8 @@
 {
-  "name": "discord-bot-template",
-  "version": "0.0.0",
-  "description": "",
+  "name": "brother-joseph",
+  "version": "0.0.1",
+  "homepage": "https://github.com/madseventwo/brother-joseph#readme",
+  "description": "For assisting members & friends of The Church of Jesus Christ of Latter-day Saints. Inspired by the prophet Joseph Smith, who brought many scriptures to light, this bot provides easy access to scriptural references and other church-related resources. Made to foster a spirit of unity and faith.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,5 +12,12 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^14.7.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/madseventwo/brother-joseph.git"
+  },
+  "bugs": {
+    "url": "https://github.com/madseventwo/brother-joseph/issues"
   }
 }
