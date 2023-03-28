@@ -1,13 +1,13 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
-// const { mongoUri, token } = require('./config.json');
+const { token } = require('./config.json');
 // const mongoose = require('mongoose');
 
 // Client Init
 const client = new Client({
-	intents:[GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers,
-		GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildPresences] });
+	intents: [GatewayIntentBits.Guilds]
+});
 
 // Event Handler
 const eventsPath = path.join(__dirname, 'events');
@@ -39,7 +39,7 @@ for (const file of commandFiles) {
 
 // Button Command Handler
 client.buttonCommands = new Collection();
-const buttonCommandsPath = path.join(__dirname, 'button-commands');
+const buttonCommandsPath = path.join(__dirname, 'commands/buttons');
 const buttonCommandFiles = fs.readdirSync(buttonCommandsPath).filter(file => file.endsWith('.js'));
 
 for (const file of buttonCommandFiles) {
@@ -51,7 +51,7 @@ for (const file of buttonCommandFiles) {
 
 // Select Menu Command Handler
 client.menuCommands = new Collection();
-const menuCommandsPath = path.join(__dirname, 'menu-commands');
+const menuCommandsPath = path.join(__dirname, 'commands/menus');
 const menuCommandFiles = fs.readdirSync(menuCommandsPath).filter(file => file.endsWith('.js'));
 
 for (const file of menuCommandFiles) {
@@ -87,4 +87,6 @@ mongoose
 		console.log(err);
 	  });
 
-client.login(token); */
+*/
+
+client.login(token); 
