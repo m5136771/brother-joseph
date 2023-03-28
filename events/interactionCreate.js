@@ -3,15 +3,8 @@ const { Events } = require('discord.js');
 module.exports = {
 	name: Events.InteractionCreate,
 	execute(interaction) {
-		/* if (interaction.member.id != 804824020251705344) {
-			interaction.reply({
-				content: `Sorry ${interaction.member.displayName}, you're not able to use my commands!`,
-				ephemeral: true,
-			});
-			return;
-		}; */
 
-		if (!interaction.isChatInputCommand() && !interaction.isButton() && !interaction.isSelectMenu()) return;
+		if (!interaction.isChatInputCommand() && !interaction.isButton() && !interaction.isStringSelectMenu()) return;
 
 		const buttonCommand = interaction.client.buttonCommands.get(interaction.customId);
 		const menuCommand = interaction.client.menuCommands.get(interaction.customId);
@@ -44,7 +37,7 @@ module.exports = {
 			}
 		};
 
-		if (interaction.isSelectMenu()) {
+		if (interaction.isStringSelectMenu()) {
 			try {
 				console.log(`╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌\n⤷ 😀 ${interaction.member.displayName}: Executing 〈 ☰ ${interaction.customId} 〉 menu command in ⟦ #${interaction.channel.name} ⟧\n`);
 				menuCommand.execute(interaction);
