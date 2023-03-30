@@ -14,7 +14,7 @@ const buttonNT = new ButtonBuilder()
 	.setDisabled(false)
 	.setStyle('Primary');
 
-const buttonBoM = new ButtonBuilder()
+const buttonBOM = new ButtonBuilder()
 	.setCustomId('bom')
 	.setLabel('Book of Mormon')
 	.setDisabled(false)
@@ -26,8 +26,8 @@ const buttonDC = new ButtonBuilder()
 	.setDisabled(false)
 	.setStyle('Success');
 
-const buttonPoGP = new ButtonBuilder()
-	.setCustomId('pogp')
+const buttonPGP = new ButtonBuilder()
+	.setCustomId('pgp')
 	.setLabel('Pearl of Great Price')
 	.setDisabled(false)
 	.setStyle('Success');
@@ -56,6 +56,6 @@ const buttonWebsite = new ButtonBuilder()
 	.setURL('https://www.yourwebsite.com');
 
 module.exports = {
-	buttonOT, buttonNT, buttonBoM, buttonDC, buttonPoGP,
+	buttonOT, buttonNT, buttonBOM, buttonDC, buttonPGP,
 	buttonPatreon, buttonPayPal, buttonWebsite
 };
