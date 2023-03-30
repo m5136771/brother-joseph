@@ -1,21 +1,32 @@
-const { EmbedBuilder } = require('discord.js');
-const { bomRow } = require('../../components/action-rows');
+const fs = require('fs');
+const rawData = fs.readFileSync('data/book-of-mormon.json');
+const bomData = JSON.parse(rawData);
 
-const embed = new EmbedBuilder()
-	.setColor('#0099ff')
-	.setTitle('Book of Mormon')
-	.setThumbnail('https://upload.wikimedia.org/wikipedia/commons/e/e5/Mormon-book.jpg')
-	.setDescription('Another Testament of Jesus Christ, a record of God\'s dealings with ancient inhabitants of the Americas.')
-	.addFields(
-		{ name: 'Number of Books', value: '15', inline: true },
-		{ name: 'Pages', value: '531', inline: true },
-		{ name: 'Words', value: '268,163', inline: true },
-		{ name: 'Time Span', value: 'Approx. 2200 BC - 421 AD' },
-		{ name: 'Major Locations', value: 'Jerusalem, Arabian Peninsula, Ancient Americas' },
-		{ name: 'Major Events', value: 'Lehi\'s family journey, Nephite and Lamanite wars, visit of Jesus Christ' },
-		{ name: 'Notable Characters', value: 'Lehi, Nephi, Alma, Moroni, Mormon' },
-		{ name: 'Importance Today', value: 'Provides spiritual guidance, testifies of Jesus Christ, clarifies doctrines' }
-	);
+const { bomRow } = require('../../components/action-rows');
+const { createPages, createPageButtons, updateEmbedWithPage } = require('../../helpers/pagination');
+
+const embedInfo = {
+	title: bomData.title_page.title,
+	color: bomData.color,
+	thumbnail: bomData.thumbnail_link,
+	description: bomData.description,
+	fields: [
+		{ name: 'Number of Books', value: (bomData.book_count ? bomData.book_count.toString() : ''), inline: true },
+		{ name: 'Time Span', value: bomData.time_span, inline: true },
+		{ name: 'Translated From', value: bomData.translations.translation_from },
+		{ name: 'Translated To', value: bomData.translations.translation_to },
+		{ name: 'Notable Characters', value: bomData.notable_characters },
+		{ name: 'Major Events', value: bomData.major_events },
+		{ name: 'Important Locations', value: bomData.important_locations },
+		{ name: 'Importance Today', value: bomData.importance_today },
+		{ name: 'Church of Jesus Christ Link', value: `[Go to ChurchofJesusChrist.org](${bomData.churchOfJesusChrist_link})` },
+		{ name: 'Come Unto Christ Link', value: `[Go to ComeUntoChrist.org](${bomData.comeUntoChrist_link})` },
+		{ name: 'Wikipedia Link', value: `[Go to Wikipedia](${bomData.wikipedia_link})` }
+	].filter(field => field.value && field.value.trim() !== ''),
+};
+
+const pages = createPages(embedInfo);
+const totalPages = pages.length;
 
 module.exports = {
 	customId: 'bom',
@@ -24,10 +35,21 @@ module.exports = {
 	async execute(interaction) {
 		await interaction.deferReply({ ephemeral: true });
 
-		await interaction.editReply({
+		const pagesRow = createPageButtons(0, totalPages);
+
+		const response = await interaction.editReply({
 			ephemeral: true,
-			embeds: [embed],
-			components: [bomRow]
+			embeds: [pages[0]],
+			components: totalPages > 1 ? [pagesRow, bomRow] : [bomRow],
+			fetchReply: true
 		}).catch(console.error);
+
+		updateEmbedWithPage(response, pages).catch((error) => {
+			if (error instanceof Error && error.message === 'Interaction timed out') {
+				console.log('Pagination timed out');
+			} else {
+				console.error(error);
+			}
+		});
 	},
 };
