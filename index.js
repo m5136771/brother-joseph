@@ -9,6 +9,15 @@ const client = new Client({
 	intents: [GatewayIntentBits.Guilds]
 });
 
+// Map to store book information
+global.bookInfoMap = new Map();
+
+//Event Emitter
+const { EventEmitter } = require('events');
+const eventEmitter = new EventEmitter();
+module.exports = { eventEmitter };
+
+
 // Event Handler
 const eventsPath = path.join(__dirname, 'events');
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
