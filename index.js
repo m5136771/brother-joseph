@@ -6,7 +6,7 @@ const { token } = require('./config.json');
 
 // Client Init
 const client = new Client({
-	intents: [GatewayIntentBits.Guilds]
+	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages]
 });
 
 // Map to store book information
@@ -16,7 +16,6 @@ global.bookInfoMap = new Map();
 const { EventEmitter } = require('events');
 const eventEmitter = new EventEmitter();
 module.exports = { eventEmitter };
-
 
 // Event Handler
 const eventsPath = path.join(__dirname, 'events');
