@@ -6,14 +6,41 @@ const bookOfMormonBooks = [
 	'Mosiah', 'Alma', 'Helaman', '3 Nephi', '4 Nephi', 'Mormon', 'Ether', 'Moroni'
 ];
 
+const bookAbbreviations = {
+	'1Ne': '1 Nephi',
+	'2Ne': '2 Nephi',
+	'3Ne': '3 Nephi',
+	'4Ne': '4 Nephi',
+	'WofM': 'Words of Mormon',
+	'WoM': 'Words of Mormon',
+};
+
 // In case of misspellings
 function findClosestBookName(inputName) {
 	console.log(`inputName: ${inputName}`);
+
+	// Check for abbreviations
+	const abbreviation = Object.keys(bookAbbreviations).find(
+		(key) => key.toLowerCase() === inputName.toLowerCase().replace(/\s/g, '')
+	  );	  
+	if (abbreviation) {
+		return bookAbbreviations[abbreviation];
+	}
+
+	for (const book of bookOfMormonBooks) {
+		// Use a regex pattern to match book names with an optional number prefix and optional space
+		const pattern = new RegExp(`^\\b\\d*\\s?${book}\\b`, 'i');
+		if (pattern.test(inputName)) {
+			console.log(`closestBook: ${book}`);
+			return book;
+		}
+	}
+
+	// If no match is found, fallback to the previous method
 	let closestBook = null;
 	let minDistance = Infinity;
 
 	for (const book of bookOfMormonBooks) {
-		console.log(`For loop at Book: ${book}`);
 		const distance = levenshtein.get(inputName, book);
 		if (distance < minDistance) {
 			minDistance = distance;
@@ -29,27 +56,28 @@ function findVerse(book, chapter, verse) {
 	console.log(`Book: ${book}`);
 	console.log(`chapter: ${chapter}`);
 	console.log(`verse: ${verse}`);
-	
+
 	for (const entry of scriptureData) {
 		if (
-		  entry.book_title === book &&
-		  entry.chapter_number === chapter &&
-		  entry.verse_number === verse
+			entry.book_title === book &&
+			entry.chapter_number === chapter &&
+			entry.verse_number === verse
 		) {
-		  return entry;
+			return entry;
 		}
-	  }
-	  return null;
+	}
+	return null;
 }
 
 function checkForScripture(text) {
 	console.log(`Checking text for scriptures: ${text}`);
 
 	// Regular expression pattern to match a scripture reference, e.g., "Alma 41:6"
-	const scripturePattern = /(\w+)\s+(\d+):(\d+)/i;
+	const scripturePattern = /(\d*\s*\w+)\s+(\d+):(\d+)/i;
 
 	// Find scripture references in the message content
-	const matches = text.match(scripturePattern); //returns an array[] with results
+	//returns an array[] with results
+	const matches = text.match(scripturePattern);
 	console.log(`matches: ${matches}`);
 
 	if (matches) {
