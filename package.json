@@ -1,6 +1,6 @@
 {
   "name": "brother-joseph",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "homepage": "https://github.com/madseventwo/brother-joseph#readme",
   "description": "For assisting members & friends of The Church of Jesus Christ of Latter-day Saints. Inspired by the prophet Joseph Smith, who brought many scriptures to light, this bot provides easy access to scriptural references and other church-related resources. Made to foster a spirit of unity and faith.",
   "main": "index.js",
@@ -11,7 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^14.8.0"
+    "discord.js": "^14.8.0",
+    "fast-levenshtein": "^3.0.0"
   },
   "repository": {
     "type": "git",
