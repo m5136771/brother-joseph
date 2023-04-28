@@ -1,22 +1,16 @@
 const { Events, EmbedBuilder } = require('discord.js');
 const { checkForScripture } = require('../helpers/scriptureParsing');
 
-// Create a cache to store the last time the event was fired for each message
 const cooldowns = new Map();
 
 module.exports = {
 	name: Events.MessageReactionAdd,
 	async execute(messageReaction, user) {
-		console.log(`Reaction received: ${messageReaction.emoji.name} from ${user}`)
-
-		// Ignore reactions from bots
 		if (user.bot) return;
-
 		if (messageReaction.emoji.name === '📖') {
-			// Check if enough time has elapsed since the last time the event was fired
 			const now = Date.now();
 			const cooldown = cooldowns.get(messageReaction.message.id);
-			if (cooldown && now < cooldown + 180000) return; // 180000 ms = 3 minutes
+			if (cooldown && now < cooldown + 180000) return;
 			cooldowns.set(messageReaction.message.id, now);
 
 			const verseData = checkForScripture(messageReaction.message.content);
