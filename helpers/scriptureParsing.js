@@ -1,5 +1,5 @@
 const levenshtein = require('fast-levenshtein');
-const scriptureData = require('../data/lds-scriptures.json');
+const { Volume, Book, Chapter, Verse } = require('./models');
 
 const bookOfMormonBooks = [
 	'1 Nephi', '2 Nephi', 'Jacob', 'Enos', 'Jarom', 'Omni', 'Words of Mormon',
@@ -43,18 +43,27 @@ function findClosestBookName(inputName) {
 	return closestBook;
 }
 
-function findVerse(book, chapter, verse) {
+async function findVerse(book, chapter, verse) {
 
-	for (const entry of scriptureData) {
-		if (
-			entry.book_title === book &&
-			entry.chapter_number === chapter &&
-			entry.verse_number === verse
-		) {
-			return entry;
-		}
-	}
-	return null;
+	const bookData = await Book.findOne({ book_title: book });
+	if (!bookData) {
+		console.log(`Book not found: ${book}`);
+		return null;
+	};
+
+	const chapterData = await Chapter.findOne({ bookId: bookData.bookId, chapter_number: chapter });
+	if (!chapterData) {
+		console.log(`Chapter not found: ${book} ${chapter}`);
+		return null;
+	};
+
+	const verseData = await Verse.findOne({ chapterId: chapterData.chapterId, verse_number: verse });
+	if (!verseData) {
+		console.log(`Verse not found: ${book} ${chapter}:${verse}`);
+		return null;
+	};
+
+	return verseData;
 }
 
 function checkForScripture(text) {
@@ -89,4 +98,4 @@ function checkForScripture(text) {
 
 module.exports = {
 	checkForScripture,
-}
+};
